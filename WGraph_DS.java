@@ -30,29 +30,33 @@ public class WGraph_DS implements weighted_graph {
 
 	@Override
 	public boolean hasEdge(int node1, int node2) {
-		if(this.nodes.containsKey(node1))										//check if this node1 exist
+		
+		Node_Data l1= this.nodes.get(node1);
+		Node_Data l2= this.nodes.get(node2);
+		
+		if(l1 != null && l2 != null && node1 != node2)										//check if this node1 exist
 		{									
-			if(this.nodes.get(node1).Getneighbors().containsKey(node2))			//check if node2 is neighbor of node1
+			if(l1.GetNi().containsKey(node2))				//check if node2 is neighbor of node1
 				return true;
 		} 
 			return false;
 	}
 
 	@Override
-	public double getEdge(int node1, int node2) {
-		if(this.nodes.get(node1) != null) {
-			if(this.nodes.get(node2) != null)
-				return this.nodes.get(node1).Getneighbors().get(node2).weight;
-		}
+	public double getEdge(int node1, int node2) 
+	{
+		if(this.hasEdge(node1, node2))
+			return this.nodes.get(node1).GetNi().get(node2);
 		return -1;
 	}
 
 	@Override
 	public void addNode(int key) {
-		if(this.nodes.get(key) != null) 
+		if(this.nodes.get(key) == null) 
 		{
 			this.nodes.put(key, new Node_Data(key));
 			this.NumberOfnodes++;
+			this.NumberOfmodes++;
 		}
 		return;	
 	}
@@ -60,13 +64,13 @@ public class WGraph_DS implements weighted_graph {
 	@Override
 	public void connect(int node1, int node2, double w) 
 	{	
-		Node_Data point1= this.nodes.get(node1);
-		Node_Data point2= this.nodes.get(node2);
+		Node_Data l1= this.nodes.get(node1);
+		Node_Data l2= this.nodes.get(node2);
 
-		if(node1 != node2 && point1 !=null && point2 != null && !this.hasEdge(node1, node2)) 	 //check if the node not exist and not create edge between the node
-		{
-			point1.Getneighbors().put(node2, new edge(point2 ,w));
-			point2.Getneighbors().put(node1, new edge(point1 ,w));	
+		if(!this.hasEdge(node1,node2)) 	 //check if the node not exist and not create edge between the node
+		{	
+			l1.GetNi().put(node2,w);
+			l2.GetNi().put(node1,w);
 			NumberOfedges++;										//update the number of edged and the number of modes
 			NumberOfmodes++;
 		}
@@ -74,8 +78,6 @@ public class WGraph_DS implements weighted_graph {
 
 	@Override
 	public Collection<node_info> getV() {
-//		HashMap<Integer, node_info> map= this.nodes;
-//		return (this.nodes.values())(node_info);
 		return null;
 	}
 

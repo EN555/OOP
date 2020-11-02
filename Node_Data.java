@@ -7,13 +7,13 @@ public class Node_Data implements node_info {
 	int key;
 	String info;
 	double tag;
-	private HashMap<Integer,edge> neighbor;
-	private static int num_nodes;	
+	private HashMap<Integer, Double> neighbor;
+	private static int num_nodes=0;	
 	
 	// constructors
-	public Node_Data(int key,String info,double tag,HashMap<Integer,edge> neighbor)		//constructor that get all the parameters 
+	public Node_Data(int key,String info,double tag,HashMap<Integer, Double> hashMap)		//constructor that get all the parameters 
 	{		
-		this.neighbor= new HashMap<Integer, edge>(neighbor);
+		this.neighbor= new HashMap<Integer, Double>(hashMap);
 		this.key =key;
 		this.info=info;
 		this.tag=tag;
@@ -22,7 +22,7 @@ public class Node_Data implements node_info {
 		
 	public Node_Data(String info)
 	{
-		this(num_nodes,info,0,new HashMap<Integer,edge>());
+		this(num_nodes,info,0,new HashMap<Integer,Double>());
 	}
 
 	public Node_Data()
@@ -32,17 +32,17 @@ public class Node_Data implements node_info {
 		
 	public Node_Data(int key,String info) 
 	{
-		this(key,info,0,new HashMap<Integer,edge>());
+		this(key,info,0,new HashMap<Integer,Double>());
 	}
 		
 	public Node_Data(int key) 
 	{
-		this(key,"",0,new HashMap<Integer,edge>());
+		this(key,"",0,new HashMap<Integer,Double>());
 	}
 		
 	private Node_Data(String info,int tag) 
 	{
-		this(num_nodes,info,0,new HashMap<Integer,edge>());
+		this(num_nodes,info,0,new HashMap<Integer,Double>());
 	}
 		
 		//copy constructor
@@ -81,7 +81,7 @@ public class Node_Data implements node_info {
 		this.tag=t;
 		return t;
 	}
-	public HashMap<Integer, edge> Getneighbors() {
+	public HashMap<Integer, Double> GetNi() {
 		return this.neighbor;
 	}
 
