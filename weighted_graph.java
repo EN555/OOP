@@ -1,5 +1,6 @@
 package ex1;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * This interface represents an undirectional weighted graph.
