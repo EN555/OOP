@@ -1,11 +1,10 @@
 package ex1;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import Exercises_2.Node;
 
 
 public class WGraph_DS implements weighted_graph {
@@ -295,11 +294,8 @@ public class WGraph_DS implements weighted_graph {
 				return 0;
 		}
 
+
 	}
-
-
-
-	
 
 }
 

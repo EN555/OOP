@@ -66,7 +66,9 @@ public interface weighted_graph_algorithms {
     /**
      * This method load a graph to this graph algorithm.
      * if the file was successfully loaded - the underlying graph
-     * of this class will be changed (to the loaded one), in case the
+     * of this class will be changed (to the loaded o
+     * 
+     * ne), in case the
      * graph was not loaded the original graph should remain "as is".
      * @param file - file name
      * @return true - iff the graph was successfully loaded.
