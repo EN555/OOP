@@ -76,8 +76,8 @@ public class WGraph_DS implements weighted_graph {
 		NodeInfo l2= (NodeInfo)this.nodes.get(node2);
 
 
-		if(l1 != null && l2 !=null && node1 != node2 && !l1.GetNi().containsKey(node2))	 //check if the node not exist and not create edge between the node
-		{	
+		if(l1 != null && l2 !=null && node1 != node2 && !l1.GetNi().containsKey(node2) && w >0)	 //check if the node not exist and not create edge between the node
+		{	//it's check too that the weight greater than 0
 			l1.GetNi().put(node2, (node_info)l2);
 			l1.GetNi_W().put(node2, w);
 			l2.GetNi().put(node1,(node_info)l1);
@@ -88,13 +88,13 @@ public class WGraph_DS implements weighted_graph {
 	}
 
 	@Override
-	public Collection<node_info> getV() 
+	public Collection<node_info> getV() // ??????????????? לבדוק מה קורה כאשר הגרף הוא ריק להחזיר null או להחזיר hashmap ריק
 	{
 		return this.nodes.values();
 	}
 	
 	@Override
-	public Collection<node_info> getV(int node_id) {
+	public Collection<node_info> getV(int node_id) {   // ??????????????? לבדוק מה קורה כאשר הגרף הוא ריק להחזיר null או להחזיר hashmap ריק
 		NodeInfo l1= (NodeInfo)this.nodes.get(node_id);
 		
 		if(l1==null)
@@ -126,7 +126,9 @@ public class WGraph_DS implements weighted_graph {
 		
 		if(this.hasEdge(node1, node2)) 
 		{
-			l1.GetNi().remove(node2);
+			l1.GetNi().remove(node2);		//remove the node and her weight
+			l1.GetNi_W().remove(node2);
+			l2.GetNi().remove(node1);		//remove the other node and her weight 
 			l2.GetNi().remove(node1);
 			
 		}
@@ -163,11 +165,16 @@ public class WGraph_DS implements weighted_graph {
 	
 	public HashMap<Integer, node_info> GetNi(int node1) 
 	{
+		if(this.nodes.get(node1)==null)				//check if initial the hasmaps of the node
+			return null;
 		NodeInfo l1= (NodeInfo)this.nodes.get(node1);
 		return l1.GetNi();
 	}
+	
 	public HashMap<Integer, Double> GetNi_W(int node1) 
-	{
+	{	
+		if(this.nodes.get(node1) == null)			//check if initial the hasmaps of the node
+			return null;
 		NodeInfo l1= (NodeInfo)this.nodes.get(node1);
 		return l1.GetNi_W();
 	}
@@ -256,10 +263,12 @@ public class WGraph_DS implements weighted_graph {
 			this.tag=t;
 			return t;
 		}
+		
 		public HashMap<Integer, node_info> GetNi() 
 		{
 			return this.neighbor;
 		}
+		
 		public HashMap<Integer, Double> GetNi_W() 
 		{
 			return this.w_neighbor;
