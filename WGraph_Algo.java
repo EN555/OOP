@@ -8,6 +8,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.StringTokenizer;
+import java.io.*;
+
+import javax.imageio.IIOException;
 
 
 public class WGraph_Algo implements weighted_graph_algorithms {
@@ -39,26 +43,21 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 		if(this.h.getV().isEmpty())
 			return null;
 		
-		WGraph_DS g= new WGraph_DS();		//the min graph
+		weighted_graph g= new WGraph_DS();		//the min graph
 			
 		for(node_info iter :this.h.getV())		//create new nodes and put them at the graph
 			g.addNode(iter.getKey());
 			
-		WGraph_DS graph= (WGraph_DS)this.h;
-
-		
+		weighted_graph graph= this.h;	
 
 		for(node_info l1 : graph.getV())
 		{
 				for(node_info l2 : graph.getV(l1.getKey()))		
-			{	
-					g.GetNi(l1.getKey()).put(l2.getKey(),g.getNode(l2.getKey()));   		//update the key
-					g.GetNi_W(l1.getKey()).put(l2.getKey(), graph.GetNi_W(l1.getKey()).get(l2.getKey()));		//update the weight		
-			}
-			
-		}
-		
-		return (weighted_graph)g;
+			{		
+					g.connect(l1.getKey(), l2.getKey(), graph.getEdge(l1.getKey(), l2.getKey()));  //update the key and the weight
+			}		
+		}	
+		return g;
 	}
 		
 	public void dijkstra(int src, int dest)
@@ -66,7 +65,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 		if(this.h.getNode(src) == null || this.h.getNode(dest) == null)
 				return;
 	
-		WGraph_DS graph= (WGraph_DS)this.h;							//downcating the graph
+		weighted_graph graph= this.h;							//downcating the graph
 
 		Queue<node_info> pq = new PriorityQueue<node_info>();		//create min priority queue
 		
@@ -81,14 +80,13 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 			for(node_info iter : graph.getV(it.getKey())) {		//move on all his neighbors and update their distance
 				
 				if(iter.getInfo().equals(Colors.WHITE.toString())) {							// first option
-					iter.setTag(graph.GetNi_W(it.getKey()).get(iter.getKey()) +it.getTag());
+					iter.setTag(graph.getEdge(it.getKey(), iter.getKey()) +it.getTag());
 					iter.setInfo(Colors.GREY.toString());
 					pq.add(iter);
 					}
 						if(iter.getInfo().equals(Colors.GREY.toString()))	//second option
 					{	
-							double dis=  it.getTag()+ graph.GetNi_W(it.getKey()).get(iter.getKey()); // the weight of the edge of iter and it and the weight of the it
-							
+							double dis=  it.getTag()+ graph.getEdge(it.getKey(), iter.getKey());	// the weight of the edge of iter and it and the weight of the it
 							if(iter.getTag()> dis)
 						{
 								iter.setTag(dis);	
@@ -156,44 +154,65 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
 	@Override
 	public boolean save(String file) {
-
-		return false;
+		File file1 = new File(file);			//create pointer to the file path
+		try {
+		FileWriter fl = new FileWriter(file1); 
+		PrintWriter pw = new PrintWriter(fl);
+		pw.println(this.h.toString());
+		pw.close();
+		}
+		catch (FileNotFoundException it)
+		{
+			System.out.println("you need to enter file!!");
+			it.printStackTrace();
+			 return false;
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean load(String file) {
-
-		return false;
-	}
-	public static void main(String [] args)
-	{
+		try { 
+			FileReader fr = new FileReader(file); 
+			BufferedReader br = new BufferedReader(fr);
+			String str;
+			weighted_graph graph = new WGraph_DS();
+			str = br.readLine();
+			if(str.isEmpty())		//check if the file is empty
+				return false;
+			while(!str.isEmpty()) 
+			{									
+			String[] numbers = str.replaceAll("[^0-9.]+", " ").trim().split(" ");	
+			int node = Integer.parseInt(numbers[0]);					//define the loc of the node
+			graph.addNode(node);						//create a node
+			int loc= 1;
+			while(loc< numbers.length)								//load the neighbors of this node
+			{
+				int neighbor= Integer.parseInt(numbers[loc]);			//define the loc of the neighbor
+				graph.addNode(neighbor);	
+				Double weight= Double.parseDouble(numbers[loc+1]);		//define the loc of the weight
+				graph.connect(node , neighbor , weight);			//create an edge between them
+				loc+=2;
+			}
+			
+			str = br.readLine();
+					}
+			this.h= graph;
+			br.close();     
+			fr.close();   
+			return true;
+		}
+		catch(IOException ex) {  
 		
-		WGraph_Algo h= new WGraph_Algo();
-		WGraph_DS graph= new WGraph_DS();
-		graph.addNode(0);
-		graph.addNode(1);
-		graph.addNode(2);
-		graph.addNode(3);
-		graph.addNode(4);
-		graph.addNode(5);
-		graph.addNode(6);
-		graph.addNode(2);
-		graph.connect(0, 1, 5);
-		graph.connect(2, 1, 5);
-		graph.connect(2, 3, 5);
-		graph.connect(2, 5, 10);
-		graph.connect(3, 4, 15);
-		graph.connect(4, 6, 20);
-		graph.connect(4, 1, 3);
-		h.init(graph);
-		System.out.println(graph);
-		System.out.println("/////////////////////////////////////////////////");
-//		System.out.println(h.copy());
-		System.out.println("/////////////////////////////////////////////////");
-		System.out.println(h.isConnected());
-		System.out.println(h.shortestPathDist(1,6));
-		System.err.println("////////////////////////////");
-		System.out.println(h.shortestPath(0, 6));
+			System.out.print("Error reading file\n" + ex);
+			return false;
+		}
+		
 	}
 
 }

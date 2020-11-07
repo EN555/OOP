@@ -93,18 +93,6 @@ public class WGraph_DS implements weighted_graph {
 		return this.nodes.values();
 	}
 	
-//	public HashMap<Integer, NodeInfo> getVmap() 			//////////////////		return NodeInfo collection
-//	{
-//		HashMap<Integer,NodeInfo> map= new HashMap<Integer,NodeInfo>();
-//		Iterator<node_info> iter= this.nodes.values().iterator();
-//		while(iter.hasNext())
-//		{
-//			NodeInfo l1= (NodeInfo)iter.next();
-//			map.put(l1.getKey(),l1);
-//		}
-//		return map;
-//	}
-//	
 	@Override
 	public Collection<node_info> getV(int node_id) {
 		NodeInfo l1= (NodeInfo)this.nodes.get(node_id);
@@ -189,10 +177,12 @@ public class WGraph_DS implements weighted_graph {
 		for (Integer keys : this.nodes.keySet())  
 		{
 			NodeInfo l1= (NodeInfo)this.nodes.get(keys);
-			mText.append("\n"+ "TheKey= "+ l1.getKey() +" TheInfo= "+l1.getInfo());
+			mText.append("TheKey= "+ l1.getKey() +" TheInfo= "+l1.getInfo());
 			if(l1.GetNi().isEmpty() ==false)
+				mText.append(" TheNeigbor= ");
 				for(node_info iter: l1.GetNi().values())
-				mText.append(" TheNeigbor= "+ iter.getKey() +" The Weight "+ l1.GetNi_W().get(iter.getKey()) +"\n");
+				mText.append(" The key= "+ iter.getKey() +" The Weight= "+ this.getEdge(l1.getKey(), iter.getKey())+ ",");
+				mText.append("\n");
 		}
 		return mText.toString();
 	}
@@ -275,10 +265,6 @@ public class WGraph_DS implements weighted_graph {
 			return this.w_neighbor;
 		}
 		
-//		public void addNi(node_info Ni, double weight) 
-//		{
-//			this.neighbor.put(Ni.getKey(), Ni);
-//		}
 		public String toString() 
 		{
 			return "key="+ " "+ this.getKey() +" info=" +this.getInfo() ;
