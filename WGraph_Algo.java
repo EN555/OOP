@@ -39,10 +39,10 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
 	@Override
 	public weighted_graph copy() {
-		
-		if(this.h.getV().isEmpty())
-			return null;
-		
+	
+		if(this.h ==null ) {			//if the graph initial to null
+			 return null;
+		}
 		weighted_graph g= new WGraph_DS();		//the min graph
 			
 		for(node_info iter :this.h.getV())		//create new nodes and put them at the graph
@@ -72,8 +72,8 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 		for(node_info all : graph.getV())							//initial the info to WHITE it mean that no one didn't visit there
 			all.setInfo(Colors.WHITE.toString());
 		
-		this.h.getNode(src).setTag(0);								//initial the src to distance 0		
-		pq.add(this.h.getNode(src));								//add the src node to the priority queue
+		graph.getNode(src).setTag(0);								//initial the src to distance 0		
+		pq.add(graph.getNode(src));								//add the src node to the priority queue
 		
 		while(!pq.isEmpty()) {
 		node_info it= pq.poll();
@@ -128,23 +128,25 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 	@Override
 	public List<node_info> shortestPath(int src, int dest) 
 	{
+		if(this.h.getNode(src)==null || this.h.getNode(dest) == null)
+			return null;
 		dijkstra(src, dest);
 		if(this.h.getNode(dest).getInfo().equals(Colors.WHITE.toString()))
 				return null;
 		
 		LinkedList<node_info> ls= new LinkedList<node_info>();
 		node_info temp =this.h.getNode(dest);
-		double smallest=0;
+		double worth=0;
 		ls.push(temp);	
 		while(temp.getKey() != src) {
 			Iterator<node_info> iter = this.h.getV(temp.getKey()).iterator();		//define the node that we check is neighbors			
-			smallest = iter.next().getTag();
+			
 			for(node_info l1 : this.h.getV(temp.getKey())) 			//move on all the neighbor of dest and look for the smallest 
 			{		
-					if(l1.getTag()<= smallest)				//check if the current smallest than iter.next 
+					if(l1.getTag() == temp.getTag()-this.h.getEdge(temp.getKey(), l1.getKey()))				//check if the current smallest than iter.next 
 					{
-						smallest = l1.getTag();
 						temp = l1;
+						break;
 					}			
 				}
 			ls.push(temp);									//push to the head of the list
@@ -154,6 +156,9 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
 	@Override
 	public boolean save(String file) {
+		
+		if(this.h ==null)			//check if have any graph
+			return false;
 		File file1 = new File(file);			//create pointer to the file path
 		try {
 		FileWriter fl = new FileWriter(file1); 

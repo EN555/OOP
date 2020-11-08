@@ -1,6 +1,7 @@
 package ex1;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,7 +14,6 @@ public class WGraph_DS implements weighted_graph {
 	private int NumberOfedges=0;
 	private int NumberOfnodes=0;
 	private int NumberOfmodes=0;
-	private static int count_nodes=0;
 	
 	//constructors
 	public WGraph_DS()
@@ -64,7 +64,6 @@ public class WGraph_DS implements weighted_graph {
 			this.nodes.put(key, new NodeInfo(key));
 			this.NumberOfnodes++;
 			this.NumberOfmodes++;
-			this.count_nodes++;
 		}
 		return;	
 	}
@@ -76,29 +75,46 @@ public class WGraph_DS implements weighted_graph {
 		NodeInfo l2= (NodeInfo)this.nodes.get(node2);
 
 
-		if(l1 != null && l2 !=null && node1 != node2 && !l1.GetNi().containsKey(node2) && w >0)	 //check if the node not exist and not create edge between the node
+		if(l1 != null && l2 !=null && node1 != node2 && w >0)	 //check if the node not exist and not create edge between the node
 		{	//it's check too that the weight greater than 0
+			double weight = 0;
+			if(l1.GetNi_W().get(l2.getKey()) != null)
+				weight = l1.GetNi_W().get(l2.getKey());
+			Boolean hasHedge= false;
+			if(l1.GetNi().get(l2.getKey()) != null)			//check if has an edge and he only update the weight 
+			{
+				hasHedge =true;
+			}
 			l1.GetNi().put(node2, (node_info)l2);
 			l1.GetNi_W().put(node2, w);
 			l2.GetNi().put(node1,(node_info)l1);
 			l2.GetNi_W().put(node1, w);
-			NumberOfedges++;										//update the number of edged and the number of modes
+			if( w != weight)			//check if he update same 
+			{
 			NumberOfmodes++;
+			}
+			if(!hasHedge) 
+			{
+			NumberOfedges++;										//update the number of edges
+			}
 		}
 	}
 
 	@Override
-	public Collection<node_info> getV() // ??????????????? לבדוק מה קורה כאשר הגרף הוא ריק להחזיר null או להחזיר hashmap ריק
+	public Collection<node_info> getV() 
 	{
 		return this.nodes.values();
 	}
 	
 	@Override
-	public Collection<node_info> getV(int node_id) {   // ??????????????? לבדוק מה קורה כאשר הגרף הוא ריק להחזיר null או להחזיר hashmap ריק
+	public Collection<node_info> getV(int node_id) {  
 		NodeInfo l1= (NodeInfo)this.nodes.get(node_id);
 		
-		if(l1==null)
-			return null;
+		if(l1==null) 			//return empty collection when the getV is empty
+		{
+			HashMap<Integer, node_info> empty= new HashMap<Integer, node_info>();
+			return empty.values();
+		}
 		return l1.GetNi().values();
 	}
 
@@ -112,7 +128,11 @@ public class WGraph_DS implements weighted_graph {
 		{
 			NodeInfo l2= (NodeInfo)this.nodes.get(i);
 			l2.GetNi().remove(key);
+			NumberOfmodes++;
+			NumberOfedges--;
 		}
+		NumberOfmodes++;
+		NumberOfnodes--;
 		return this.nodes.remove(key);
 		}
 		return null;
@@ -130,7 +150,8 @@ public class WGraph_DS implements weighted_graph {
 			l1.GetNi_W().remove(node2);
 			l2.GetNi().remove(node1);		//remove the other node and her weight 
 			l2.GetNi().remove(node1);
-			
+			NumberOfedges--;
+			NumberOfmodes++;
 		}
 	}
 
