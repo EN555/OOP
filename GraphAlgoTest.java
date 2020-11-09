@@ -67,7 +67,7 @@ class GraphAlgoTest {
 		h.init(null);
 		assertNull(h.getGraph() , "the graph is null!");
 		assertFalse(h.isConnected());
-		assertNotNull(h.shortestPath(1, 2), "you need to reaturn empty path!");
+		assertNull(h.shortestPath(1, 2), "you need to reaturn null!");
 		assertTrue(h.shortestPathDist(0, 1) == -1, "no path!");
 //		assertFalse(h.save("graph.txt"), "you can't need save null!!");
 //		assertFalse(h.load("graph.txt"), "the folder not exist!");
@@ -80,7 +80,7 @@ class GraphAlgoTest {
 		weighted_graph g = new WGraph_DS();
 		h.init(g);
 		assertTrue(h.shortestPathDist(0, 5) == -1);
-		assertNotNull(h.shortestPath(0, 5) , "need to return empty path!");
+		assertNull(h.shortestPath(0, 5) , "need to return null!");
 		assertTrue(h.isConnected() , "the graph is connected!");
 		assertTrue(h.shortestPathDist(0,5) == -1);	
 	}
@@ -114,7 +114,7 @@ class GraphAlgoTest {
 		weighted_graph inner = this.graph();
 		weighted_graph_algorithms h =  this.alg();
 		h.init(inner);
-		assertNotNull(h.shortestPath(0, 0) ," you not need to return null!!" );
+		assertNull(h.shortestPath(0, 0) ," you not need to return null!!" );
 		assertNotNull(h.shortestPath(1, 1) ," you not need to return null!!" );
 		h.getGraph().connect(2, 4, 2.99);
 		LinkedList<node_info> list = new LinkedList<node_info>();

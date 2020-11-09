@@ -29,16 +29,29 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 	{	
 		this.h = g;	
 	}
+	/**
+     * Init the graph on which this set of algorithms operates on.
+     * @param g
+     */
 	@Override
 	public void init(weighted_graph g) {
 		this.h = g;
 	}
-
+	 /**
+     * Return the underlying graph of which this class works.
+     * @return
+     */
 	@Override
 	public weighted_graph getGraph() {
 		return this.h;
 	}
-
+	 /**
+     * Compute a deep copy of this weighted graph.
+     * the concept of the way i work is first you move on all the nodes and create them
+     * second you move on the big graph and organize the neighbors
+     * the run time is O(V+E)
+     * @return weighted graph
+     */
 	@Override
 	public weighted_graph copy() {
 	
@@ -55,10 +68,17 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 					int v1 = node.getKey();
 					int v2 = neighbor.getKey();
 					g.connect(v1, v2, graph.getEdge(v1, v2));  //update the key and the weight
-			}		
+			}
 		}	
 		return g;
 	}
+	/**
+	 * I implement the dijkstra algorithm
+	 * for know if i visit in node i used enum BLACK-mean i be there and in all his neighbors
+	 *  WHIGTE mean i didn't was there and GREY mean i was there but i didn't chek all his neighbors
+	 *  i too use the tag of every node to sighn the distance from the source
+	 *
+	 */
 		
 	public void dijkstra(int src, int dest)
 	{	
@@ -98,7 +118,12 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 			it.setInfo(Colors.BLACK.toString());			//we finish with that node
 		}		
 	}
-
+	  /**
+	   * the method use dijkstra and the method only check if have any WHITE node 
+	   * what mean that i didn't were there
+     * Returns true if and only if (iff) there is a valid path from EVREY node to each other
+     * @return
+     */
 	@Override
 	public boolean isConnected() {
 		if(this.h == null)					//check if the graph is null
@@ -118,7 +143,15 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 			
 		return true;
 	}
-
+	  /**
+	 * it's method imlement with simple using dijkstra , i only check if the dest is 
+	 * WHITE or BLACK and you can know the answer
+     * returns the length of the shortest path between src to dest
+     * Note: if no such path --> returns -1
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     */
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		if(this.h == null || this.h.getNode(src) == null || this.h.getNode(dest) == null)
@@ -130,16 +163,24 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 		}
 			return -1;
 	}
-
+	 /**
+	  *the concept of my method is to start from the dest and search her parent 
+	  * with a simple calculate 
+     * returns the the shortest path between src to dest - as an ordered List of nodes:
+     * Note if no such path returns null;
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     */
 	@Override
 	public List<node_info> shortestPath(int src, int dest) 
 	{
 		if(this.h == null || this.h.getNode(src)==null || this.h.getNode(dest) == null)		 
-			return  new LinkedList<node_info>();
+			return  null;
 			
 		dijkstra(src, dest);							//call to dijkstra
 		if(this.h.getNode(dest).getInfo().equals(Colors.WHITE.toString()))
-				return new LinkedList<node_info>();
+				return null;
 		
 		LinkedList<node_info> ls= new LinkedList<node_info>();				//initial linked list to put in the nodes
 		node_info temp =this.h.getNode(dest);
@@ -156,7 +197,13 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 		}
 		return ls;
 	}
-
+	 /**
+	  * I uses stream because it's simple use with object 
+     * Saves this weighted (undirected) graph to the given
+     * file name
+     * @param file - the file name (may include a relative path).
+     * @return true - iff the file was successfully saved
+     */
 	@Override
 	public boolean save(String file) {
 		
@@ -186,7 +233,16 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 		}		
 		return true;					//if the prog didn't catch by any catch error it'w will return true
 	}
-
+	 /**
+     * This method load a graph to this graph algorithm.
+     * if the file was successfully loaded - the underlying graph
+     * of this class will be changed (to the loaded o
+     * 
+     * ne), in case the
+     * graph was not loaded the original graph should remain "as is".
+     * @param file - file name
+     * @return true - iff the graph was successfully loaded.
+     */
 	@Override
 	public boolean load(String file) {
 		

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 
 
@@ -16,27 +17,30 @@ public class WGraph_DS implements weighted_graph ,Serializable {
 	private int NumberOfnodes=0;
 	private int NumberOfmodes=0;
 	
-	//constructors
+	//constructor
 	public WGraph_DS()
 	{  											
 		this.nodes= new HashMap<Integer, node_info>();	
 	}
 
-	
-	
-	public WGraph_DS(HashMap<Integer, node_info> a)
-	{  
-		this.nodes= a ;	
-	}
-	
+	/**
+     * return the node_data by the node_id,
+     * @param key - the node_id
+     * @return the node_data by the node_id, null if none.
+     */
 	@Override
 	public node_info getNode(int key) {
 		return this.nodes.get(key);
 	}
-
+    /**
+     * return true iff (if and only if) there is an edge between node1 and node2
+     * Note: this method should run in O(1) time.
+     * @param node1
+     * @param node2
+     * @return
+     */
 	@Override
 	public boolean hasEdge(int node1, int node2) {
-		
 		NodeInfo l1= (NodeInfo)this.nodes.get(node1);
 		NodeInfo l2= (NodeInfo)this.nodes.get(node2);
 		
@@ -47,7 +51,14 @@ public class WGraph_DS implements weighted_graph ,Serializable {
 		} 
 			return false;
 	}
-
+	 /**
+     * return the weight if the edge (node1, node1). In case
+     * there is no such edge - should return -1
+     * Note: this method should run in O(1) time.
+     * @param node1
+     * @param node2
+     * @return
+     */
 	@Override
 	public double getEdge(int node1, int node2) 	
 	{
@@ -58,6 +69,12 @@ public class WGraph_DS implements weighted_graph ,Serializable {
 		return -1;
 	}
 
+	/**
+     * add a new node to the graph with the given key.
+     * Note: this method should run in O(1) time.
+     * Note2: if there is already a node with such a key -> no action should be performed.
+     * @param key
+     */
 	@Override
 	public void addNode(int key) {
 		if(this.nodes.get(key) == null) 					//check if have there node
@@ -68,10 +85,14 @@ public class WGraph_DS implements weighted_graph ,Serializable {
 		}
 		return;	
 	}
-
+	 /**
+     * Connect an edge between node1 and node2, with an edge with weight >=0.
+     * Note: this method should run in O(1) time.
+     * Note2: if the edge node1-node2 already exists - the method simply updates the weight of the edge.
+     */
 	@Override
-	public void connect(int node1, int node2, double w) 
-	{	
+	public void connect(int node1, int node2, double w)
+	{
 		NodeInfo l1= (NodeInfo)this.nodes.get(node1);
 		NodeInfo l2= (NodeInfo)this.nodes.get(node2);
 
@@ -100,25 +121,39 @@ public class WGraph_DS implements weighted_graph ,Serializable {
 			}
 		}
 	}
-
+	/**
+     * This method return a pointer (shallow copy) for a
+     * Collection representing all the nodes in the graph.
+     * Note: this method should run in O(1) tim
+     * @return Collection<node_data>
+     */
 	@Override
 	public Collection<node_info> getV() 
 	{
 		return this.nodes.values();
 	}
-	
+	 /**
+     * This method returns a Collection containing all the
+     * nodes connected to node_id
+     * Note: this method should run in O(1) time.
+     * @return Collection<node_data>
+     */
 	@Override
-	public Collection<node_info> getV(int node_id) {  
+	public Collection<node_info> getV(int node_id) { 
 		NodeInfo l1= (NodeInfo)this.nodes.get(node_id);
 		
 		if(l1==null) 			//return empty collection when the getV is empty
-		{
-			HashMap<Integer, node_info> empty= new HashMap<Integer, node_info>();
-			return empty.values();				
-		}
+			return new LinkedList<node_info>();				
+		
 		return l1.GetNi().values();
 	}
-
+	/**
+     * Delete the node (with the given ID) from the graph -
+     * and removes all edges which starts or ends at this node.
+     * This method  run in O(n), |V|=n, as all the edges should be removed.
+     * @return the data of the removed node (null if none).
+     * @param key
+     */
 	@Override
 	public node_info removeNode(int key) 
 	{
@@ -138,7 +173,12 @@ public class WGraph_DS implements weighted_graph ,Serializable {
 		}
 		return null;
 	}
-
+	/**
+     * Delete the edge from the graph,
+     * Note: this method should run in O(1) time.
+     * @param node1
+     * @param node2
+     */
 	@Override
 	public void removeEdge(int node1, int node2) 
 	{	
@@ -155,36 +195,33 @@ public class WGraph_DS implements weighted_graph ,Serializable {
 			NumberOfmodes++;
 		}
 	}
-
+	 /** return the number of vertices (nodes) in the graph.
+     * Note: this method run in O(1) time.
+     * @return
+     */
 	@Override
 	public int nodeSize() {
 		return this.NumberOfnodes;
 	}
-
+	 /**
+     * return the number of edges (undirectional graph).
+     * Note: this method run in O(1) time.
+     * @return
+     */
 	@Override
 	public int edgeSize() {
 		return this.NumberOfedges;
 	}
-
+	 /**
+     * return the Mode Count - for testing changes in the graph.
+     * Any change in the inner state of the graph should cause an increment in the ModeCount
+     * @return
+     */
 	@Override
 	public int getMC() {
 		return this.NumberOfmodes;
 	}
-
-	public void nodeSize(int nodes) {
-		this.NumberOfnodes=nodes;
-	}
-
-
-	public void edgeSize(int edges) {
-		this.NumberOfedges= edges;
-	}
-
-
-	public void getMC(int mc) {
-		this.NumberOfmodes=mc;
-	}
-
+	
 	public String toString() {
 		StringBuffer mText = new StringBuffer();
 		for (Integer keys : this.nodes.keySet())  
@@ -224,7 +261,7 @@ public class WGraph_DS implements weighted_graph ,Serializable {
 	
 	
 	////       inner class		/////
-	
+
 	
 	private class NodeInfo implements node_info , Comparable<node_info> ,Serializable{
 		int key;
@@ -234,68 +271,76 @@ public class WGraph_DS implements weighted_graph ,Serializable {
 		private HashMap<Integer, Double> w_neighbor;
 		
 		
-		// constructors
-		public NodeInfo(int key,String info,double tag,HashMap<Integer,node_info> hashMap ,HashMap<Integer, Double> hashMap_weight)		//constructor that get all the parameters 
-		{		
-			this.neighbor= new HashMap<Integer, node_info>(hashMap);
-			this.w_neighbor= new HashMap<Integer, Double>(hashMap_weight);
-			this.key =key;
-			this.info=info;
-			this.tag=tag;
-		}
-					
-		public NodeInfo(int key,String info) 
-		{
-			this(key,info,0,new HashMap<Integer,node_info>(),new HashMap<Integer,Double>());
-		}
-			
+		// constructor
 		public NodeInfo(int key) 
 		{
-			this(key,"",0,new HashMap<Integer,node_info>(),new HashMap<Integer,Double>());
+			this.neighbor= new HashMap<Integer, node_info>();
+			this.w_neighbor= new HashMap<Integer, Double>();
+			this.key =key;
+			this.info="";
+			this.tag=0;
 		}
-			
-
-			//copy constructor
-		public NodeInfo(NodeInfo copy) 								
-		{																		
-			this(copy.key,copy.info, copy.tag, copy.neighbor, copy.w_neighbor);
-		}
-
+		 /**
+	     * Return the key (id) associated with this node.
+	     * Note: each node_data should have a unique key.
+	     * @return
+	     */
 		@Override
 		public int getKey() {
 			// TODO Auto-generated method stub
 			return this.key;
 		}
-
+		 /**
+	     * return the remark (meta data) associated with this node.
+	     * @return
+	     */
 		@Override
 		public String getInfo() {
 			// TODO Auto-generated method stub
 			return this.info;
 		}
-
+		 /**
+	     * Allows changing the remark (meta data) associated with this node.
+	     * @param s
+	     */
 		@Override
 		public void setInfo(String s) {
 			// TODO Auto-generated method stub
 			this.info=s;
 		}
-
+		/**
+	     * Allows changing the remark (meta data) associated with this node.
+	     * @param s
+	     */
 		@Override
 		public double getTag() {
 			// TODO Auto-generated method stub
 			return this.tag;
 		}
-
+		 /**
+	     * Temporal data (aka distance, color, or state)
+	     * which can be used be algorithms
+	     * @return
+	     */
 		@Override
 		public double setTag(double t) {					
 			// TODO Auto-generated method stub
 			this.tag=t;
 			return t;
 		}
+		/**
+		 *only to the outer class have access to this method
+		 * @return the neighbors of the specific node
+		 */
 		
 		public HashMap<Integer, node_info> GetNi() 
 		{
 			return this.neighbor;
 		}
+		/**
+		 *only to the outer class have access to this method
+		 * @return the weight of the neighbors of the specific node
+		 */
 		
 		public HashMap<Integer, Double> GetNi_W() 
 		{
@@ -307,7 +352,9 @@ public class WGraph_DS implements weighted_graph ,Serializable {
 			return "key="+ " "+ this.getKey() +" info=" +this.getInfo() ;
 		
 		}
-
+		/**
+		 * the dest of this function is to the priority queue
+		 */
 		@Override
 		public int compareTo(node_info l1) {			//this method for the priority queue
 			if(this.getTag()> l1.getTag())
