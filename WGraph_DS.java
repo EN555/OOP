@@ -1,5 +1,6 @@
 package ex1;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,7 +9,7 @@ import java.util.Iterator;
 
 
 
-public class WGraph_DS implements weighted_graph {
+public class WGraph_DS implements weighted_graph ,Serializable {
 	
 	private HashMap<Integer, node_info> nodes;	
 	private int NumberOfedges=0;
@@ -39,7 +40,7 @@ public class WGraph_DS implements weighted_graph {
 		NodeInfo l1= (NodeInfo)this.nodes.get(node1);
 		NodeInfo l2= (NodeInfo)this.nodes.get(node2);
 		
-		if(l1 != null && l2 != null && node1 != node2)										//check if this node1 exist
+		if(l1 != null && l2 != null && node1 != node2)		//check if this node1 exist
 		{									
 			if(l1.GetNi().containsKey(node2))				//check if node2 is neighbor of node1
 				return true;
@@ -48,9 +49,9 @@ public class WGraph_DS implements weighted_graph {
 	}
 
 	@Override
-	public double getEdge(int node1, int node2) 
+	public double getEdge(int node1, int node2) 	
 	{
-		if(this.hasEdge(node1, node2)) {
+		if(this.hasEdge(node1, node2)) {						//check if have edge between them 
 			NodeInfo l1= (NodeInfo)this.nodes.get(node1);
 			return l1.GetNi_W().get(node2);
 		}
@@ -59,11 +60,11 @@ public class WGraph_DS implements weighted_graph {
 
 	@Override
 	public void addNode(int key) {
-		if(this.nodes.get(key) == null) 
+		if(this.nodes.get(key) == null) 					//check if have there node
 		{
 			this.nodes.put(key, new NodeInfo(key));
-			this.NumberOfnodes++;
-			this.NumberOfmodes++;
+			this.NumberOfnodes++;			//update the number of nodes
+			this.NumberOfmodes++;			//update the number of modes
 		}
 		return;	
 	}
@@ -95,7 +96,7 @@ public class WGraph_DS implements weighted_graph {
 			}
 			if(!hasHedge) 
 			{
-			NumberOfedges++;										//update the number of edges
+			NumberOfedges++;				//update the number of edges
 			}
 		}
 	}
@@ -113,7 +114,7 @@ public class WGraph_DS implements weighted_graph {
 		if(l1==null) 			//return empty collection when the getV is empty
 		{
 			HashMap<Integer, node_info> empty= new HashMap<Integer, node_info>();
-			return empty.values();
+			return empty.values();				
 		}
 		return l1.GetNi().values();
 	}
@@ -122,16 +123,16 @@ public class WGraph_DS implements weighted_graph {
 	public node_info removeNode(int key) 
 	{
 		NodeInfo l1= (NodeInfo)this.nodes.get(key);
-		if(l1 != null) 
+		if(l1 != null)       //first of all check if the node is null
 		{
-		for(int i: l1.GetNi().keySet()) 
+		for(int i: l1.GetNi().keySet()) 				//move on all his neighbors
 		{
 			NodeInfo l2= (NodeInfo)this.nodes.get(i);
-			l2.GetNi().remove(key);
-			NumberOfmodes++;
+			l2.GetNi().remove(key);			//remove the neighbors
+			NumberOfmodes++;            
 			NumberOfedges--;
 		}
-		NumberOfmodes++;
+		NumberOfmodes++;					//else update because of the node himself
 		NumberOfnodes--;
 		return this.nodes.remove(key);
 		}
@@ -183,23 +184,7 @@ public class WGraph_DS implements weighted_graph {
 	public void getMC(int mc) {
 		this.NumberOfmodes=mc;
 	}
-	
-	public HashMap<Integer, node_info> GetNi(int node1) 
-	{
-		if(this.nodes.get(node1)==null)				//check if initial the hasmaps of the node
-			return null;
-		NodeInfo l1= (NodeInfo)this.nodes.get(node1);
-		return l1.GetNi();
-	}
-	
-	public HashMap<Integer, Double> GetNi_W(int node1) 
-	{	
-		if(this.nodes.get(node1) == null)			//check if initial the hasmaps of the node
-			return null;
-		NodeInfo l1= (NodeInfo)this.nodes.get(node1);
-		return l1.GetNi_W();
-	}
-	
+
 	public String toString() {
 		StringBuffer mText = new StringBuffer();
 		for (Integer keys : this.nodes.keySet())  
@@ -214,12 +199,34 @@ public class WGraph_DS implements weighted_graph {
 		}
 		return mText.toString();
 	}
+	@Override
+	public boolean equals(Object o)
+	{	
+		boolean worth = true;
+		if(o instanceof weighted_graph) {
+			weighted_graph l1= (weighted_graph)o;
+			int count= 0; 
+			for(node_info iter : l1.getV())
+			{	
+				if(iter.equals(this.getNode(iter.getKey()))) 
+				{
+					
+				}
+				else {
+					worth = false;
+				}
+				count++;
+			}
+			
+		}
+		return worth;
+	}
 	
 	
 	////       inner class		/////
 	
 	
-	private class NodeInfo implements node_info , Comparable<node_info> {
+	private class NodeInfo implements node_info , Comparable<node_info> ,Serializable{
 		int key;
 		String info;
 		double tag;
@@ -302,17 +309,27 @@ public class WGraph_DS implements weighted_graph {
 		}
 
 		@Override
-		public int compareTo(node_info l1) {
+		public int compareTo(node_info l1) {			//this method for the priority queue
 			if(this.getTag()> l1.getTag())
 				return 1;
 			if(this.getTag()< l1.getTag())
 				return -1;
 				return 0;
 		}
-
+		@Override
+		public boolean equals(Object o)
+		{
+			if(o instanceof node_info)
+			{	
+				node_info l1 = (node_info)o;
+				if(this.key == l1.getKey() && this.getInfo().equals(l1.getInfo()))
+					return true;
+			}
+				return false;
+			
+		}
 
 	}
-
 }
 
 

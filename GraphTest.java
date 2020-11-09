@@ -9,10 +9,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GraphTest {
+	
 	@BeforeAll
 	static void runOnceBeforeClass()
 	{
@@ -33,65 +37,114 @@ class GraphTest {
 	{
 		System.out.println("The  Current Test Finished!");
 	}
-	/// first check special cases
 	
-	WGraph_DS h= new WGraph_DS(); 		//initial empty graph
+	WGraph_DS graph() {
+		WGraph_DS graph= new WGraph_DS(); 		//initial empty graph
+		
+		return graph;
+	}
+	
 	@Test
 	 void empthyGraphTest()
 	{
-		assertEquals(null, h.getNode(0));			//get node
 	
-		assertEquals(false, h.hasEdge(0, 1));		//get edge
-
-		//	assertEquals(null, h.getV());				// בבבדיקה
-	
-		//	assertEquals(null, h.getV(0));				//בבדיקה
-
-		assertEquals(0, h.edgeSize());
-	
-		assertEquals(0, h.getMC());
-	
-		assertEquals(0, h.nodeSize());
-	
-		assertEquals(null, h.GetNi(1));	
-	
-		assertEquals(null, h.GetNi_W(1));	
+		WGraph_DS curr = graph(); 
+		assertNull(curr.getNode(0), "the node is null!!");
+		assertFalse(curr.hasEdge(0, 1), "you have a problem at edge method");
+		assertFalse(curr.hasEdge(-1, -2) , "havn't esge here");
+		assertNotNull(curr.getV(), "if the graph empty you need to return empty collection!");
+		assertNull(curr.getNode(1));
+		curr.connect(0, 1, 2);
+		assertEquals(0, curr.nodeSize());
+		assertEquals(0, curr.edgeSize());
+		assertEquals(0, curr.getMC());
 	}
 	
 	@Test
-	 void bigGraph()
+	 void smallGraphTest()
 	{
-		for(int i=0 ; i< 10000 ; i++)			//add 10000 nodes to the graph
-		{
-		h.addNode(i);	
-		}
-		for(int i=0 ; i < 1000 ; i++)
-		{
-		h.connect(i, i+1, i );	
-		}
+		WGraph_DS curr = graph(); 
+		curr.addNode(1);
+		curr.addNode(2);
+		curr.addNode(3);
+		WGraph_DS curr_copy = graph();  //copy graph
+		curr_copy.addNode(1);
+		curr_copy.addNode(2);
+		curr_copy.addNode(3);
 		
-		assertEquals(true, h.hasEdge(3, 4));			//get node
-	
-		assertEquals(3, h.getEdge(3, 4));		//get edge
-	
-		assertEquals(-1, h.getEdge(10000, 1111111));		//the edge not exist so its return -1
-		
-		assertEquals(-1, h.getEdge(0,1));					////the edge not exist because that i tried to enter her with 0 weight so its return -1
-		
-		assertEquals(10999, h.getMC());
-	
-		assertEquals(10000, h.nodeSize());
-	
-		assertEquals(0, h.GetNi(0).size());	
-	
-		assertEquals(1, h.GetNi(1).size());
+		assertTrue(curr.nodeSize() == 3 , "you have bug at add method!");
+		assertTrue(curr.edgeSize() == 0 , "you have bug at add method!");
+		assertTrue(curr.getMC() == 3 , "you have bug at add method!");
 
-		//		assertEquals(-1, h.GetNi_W(0));
-
-		//		assertEquals(1, h.GetNi(1).size());
-
+		assertEquals(curr_copy , curr , "they worth!!");
 	}
-
+		@Test
+		 void remGraphTest()
+		{
+		WGraph_DS curr = graph(); 
+		curr.addNode(1);
+		curr.addNode(2);
+		curr.addNode(3);
+		curr.removeEdge(0, 1);	
+		assertEquals(3, curr.getMC() , "you count the remove that never happen!");
+		curr.removeNode(5);
+		curr.addNode(0);
+		assertEquals(4, curr.getMC() , "you count the remove that never happen!");
+		curr.connect(0, 1, 2);
+		assertEquals(1, curr.edgeSize() , "you count the remove that never happen!");
+		curr.connect(0, 1, 2);
+		assertEquals(1, curr.edgeSize() , "you count the remove that never happen!");
+		assertEquals(5, curr.getMC() , "you count the remove that never happen!");
+		curr.connect(0, 1, 3);
+		assertEquals(6, curr.getMC() , "you count the remove that never happen!");	
+		assertNotNull(curr.getV(6), "yoe need to return empty collection!!");
+	}
 	
+		@Test
+		 void WeightGraphTest()
+		{
+			WGraph_DS curr = graph(); 
+			curr.addNode(0);
+			curr.addNode(1);
+			curr.addNode(2);
+			curr.addNode(3);
+			curr.addNode(4);
+			curr.connect(1, 2, 0);
+			assertEquals(5 , curr.getMC() , "you connect edge with weight 0");
+			assertEquals(0 , curr.edgeSize() , "you connect edge with weight 0");
+			curr.connect(0, 1, 1);
+			curr.connect(1, 2, 2);
+			assertEquals(7, curr.getMC());
+		}
+		@Test
+		 void connectGraphTest()
+		{
+			WGraph_DS curr = graph(); 
+			curr.addNode(0);
+			curr.addNode(1);
+			curr.addNode(2);
+			curr.addNode(3);
+			curr.addNode(4);
+			curr.connect(0, 0, 1);	
+			assertEquals(5, curr.getMC());
+			curr.connect(5, 7, 43);
+			assertEquals(0, curr.edgeSize());
+		}
+		@Test
+		void timeTest()
+		{
+			long start = System.currentTimeMillis();
+			weighted_graph h = new WGraph_DS();
+			for(int i= 0 ; i <1000000 ; i++)
+			{
+			h.addNode(i);
+			}
+			for(int j= 0 ; j <1000001 ; j++)
+			{
+				h.connect(j , j+1 , j+1);
+			}
+			long end = System.currentTimeMillis();
+			assertTrue((end - start) <60000 , "you did it up to 10 seconds!");
+		}
 	
 }
