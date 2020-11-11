@@ -8,12 +8,51 @@ The create of nodes did after the creation of the graph:
 public void addNode(int key) 
 ```
 At the base class you can create graph, and you can crate nodes only from the graph, the create of the node executed by the inner class.
-
-for built wighted graph i used at two hashmap, the first hashmap uses for to enter the neighbros according to their key and
+For built wighted graph i used at two hashmap, the first hashmap uses for to enter the neighbros according to their key and
 the second hashmap uses for enter the same keys the weights of the edges.
 at this class have else function to add. remove node, remove edge and etc.
-### WGraph_DS
+### WGraph_Algo
+For work with this method you need to init a graph to the class:
 ```java
-public weighted_graph copy() 
+public void init(weighted_graph g)
 ```
+After that yo can execute some algorithms:
+ #### Copy
+ 
+```java
+	public weighted_graph copy() 
+  `````
+First of all I move on all the collection of the graph and I create the same nodes without their neighbors, after that I move on all the origin hashmap and check the neighbors of every node and enter them in the copy graph and update tpp the weights.
+The run time of this function is o(v+e).
+
+ #### Shortest path distance
+ ```` java
+ 	public double shortestPathDist(int src, int dest) 
+````
+I create distance fuction that implement bfs with improvement of memory place, the function use at tag- it's represent the distance from the source, but first the function initial all the tags of the nodes to -1, and the function  check the neighbors of the source node (that is tag is 0) and put in their tags 1 (because their distance from the src is 1) and etc. 
+After that function finished I checked the dest node if there have -1 its says that no path between the src to dest, else the distance it's the number that in the tag.  
+The run time of this function is o(v+e).
+ #### Shortest path
+ ```` java
+public List<node_info> shortestPath(int src, int dest)
+````
+it's operate the dist function that sighned the nodes, and the function move on the dest node and check if have node that is distance lower than the current node at 1 after that she find one like that she kept him and countinue to check at the new node and etc. the path keep in list.
+The run time of this function is o(v+e).
+ #### connected
+  ```` java
+public boolean isConnected()
+````
+It's work too on the dist function, I take randomly node and sighned all her neighbors  and the neighbors of the neighbors, after that check if have node that the function didn't succeed to reach her, it's says that that he didn't 
+connect to her.
+The run time of this function is o(v+e).
+
+
+
+
+
+
+
+
+
+
 
