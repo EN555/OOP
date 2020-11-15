@@ -10,6 +10,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 import java.io.*;
+import java.math.BigDecimal;
 
 import javax.imageio.IIOException;
 
@@ -184,11 +185,17 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 		
 		LinkedList<node_info> ls= new LinkedList<node_info>();				//initial linked list to put in the nodes
 		node_info temp =this.h.getNode(dest);
-		ls.push(temp);	
+		ls.push(temp);
 		while(temp.getKey() != src) {
-			
 			for(node_info l1 : this.h.getV(temp.getKey())){ 			//move on all the neighbor of dest and look for where he came from
-					if(l1.getTag() == temp.getTag()-this.h.getEdge(temp.getKey(), l1.getKey()))	{			
+				Double NI= l1.getTag();
+				Double edge = this.h.getEdge(temp.getKey(), l1.getKey());
+				String Sedge = String.valueOf(edge);
+				BigDecimal V_edge = new BigDecimal(Sedge);				
+				Double Source = temp.getTag();
+				String S_Source = String.valueOf(Source);
+				BigDecimal V2 = new BigDecimal(S_Source).subtract(V_edge);
+				if(NI == V2.doubleValue())	{			
 						temp = l1;
 						break;
 					}			
