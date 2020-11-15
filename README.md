@@ -23,21 +23,18 @@ After that yo can execute some algorithms:
 	public weighted_graph copy() 
   `````
 First of all I move on all the collection of the graph and I create the same nodes without their neighbors, after that I move on all the origin hashmap and check the neighbors of every node and enter them in the copy graph and update tpp the weights.
-The run time of this function is o(v+e).
 
  #### Shortest path distance
  ```` java
  	public double shortestPathDist(int src, int dest) 
 ````
-I create distance fuction that implement bfs with improvement of memory place, the function use at tag- it's represent the distance from the source, but first the function initial all the tags of the nodes to -1, and the function  check the neighbors of the source node (that is tag is 0) and put in their tags 1 (because their distance from the src is 1) and etc. 
-After that function finished I checked the dest node if there have -1 its says that no path between the src to dest, else the distance it's the number that in the tag.  
-The run time of this function is o(v+e).
+I create a function that implement dijkstra algorithm . The function use at tag- it's represent the distance from the source, and use at info to know if he visit there (I uses at three colors, WHITE- mean i didnt visit there, GREY- mean i visit there but not at all the neighbors and BLACK- i visit there and in all the neighbors. The function check the neighbors of the source node (that is tag is 0) and put in their tags the minimum weight and etc. 
+After that function finished I checked the dest node if there have BLACK in the info its says that have path between the src to dest, else the distance it's the number that in the tag.  
  #### Shortest path
  ```` java
 public List<node_info> shortestPath(int src, int dest)
 ````
 it's operate the dist function that sighned the nodes, and the function move on the dest node and check if have node that is distance lower than the current node at 1 after that she find one like that she kept him and countinue to check at the new node and etc. the path keep in list.
-The run time of this function is o(v+e).
  #### connected
   ```` java
 public boolean isConnected()
@@ -45,8 +42,16 @@ public boolean isConnected()
 It's work too on the dist function, I take randomly node and sighned all her neighbors  and the neighbors of the neighbors, after that check if have node that the function didn't succeed to reach her, it's says that that he didn't 
 connect to her.
 The run time of this function is o(v+e).
-
-
+#### save
+  ```` java
+public boolean save(String file)
+````
+The goal of the function is to create file that contain the graph, I used at StreamObjectWriter , a java function that automatically create the file from the object.
+#### load
+  ```` java
+public boolean load(String file)
+````
+The goal of the function is to take file and to crate a graph from the file, i used at StreamObjectReader, a java function that create from her save file and create an object.
 
 
 
