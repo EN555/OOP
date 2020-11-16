@@ -97,7 +97,7 @@ public class WGraph_DS implements weighted_graph ,Serializable {
 		NodeInfo l2= (NodeInfo)this.nodes.get(node2);
 
 
-		if(l1 != null && l2 !=null && node1 != node2 && w >0)	 //check if the node not exist and not create edge between the node
+		if(l1 != null && l2 !=null && node1 != node2 && w >=0)		//check if the node not exist and not create edge between the node
 		{	//it's check too that the weight greater than 0
 			double weight = 0;
 			if(l1.GetNi_W().get(l2.getKey()) != null)

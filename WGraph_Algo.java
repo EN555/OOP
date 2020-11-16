@@ -87,7 +87,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 				return;
 	
 		weighted_graph graph= this.h;							//downcating the graph
-
+				
 		Queue<node_info> pq = new PriorityQueue<node_info>();		//create min priority queue
 		
 		for(node_info all : graph.getV())							//initial the info to WHITE it mean that no one didn't visit there
