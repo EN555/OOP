@@ -2,7 +2,7 @@
 ### main goal
 The main goal of the program is to create udirected weighted graph.
 The program composed from two classes and inner class that inplements three interfaces.
-### WGraph_DS
+### First Class- WGraph_DS
 The create of nodes did after the creation of the graph:
 ```java
 public void addNode(int key) 
@@ -11,7 +11,7 @@ At the base class you can create graph, and you can crate nodes only from the gr
 For built wighted graph i used at two hashmap, the first hashmap uses for to enter the neighbros according to their key and
 the second hashmap uses for enter the same keys the weights of the edges.
 at this class have else function to add. remove node, remove edge and etc.
-### WGraph_Algo
+###Second Class- WGraph_Algo
 For work with this method you need to init a graph to the class:
 ```java
 public void init(weighted_graph g)
